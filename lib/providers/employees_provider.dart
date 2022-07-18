@@ -151,4 +151,18 @@ class Employees with ChangeNotifier {
       rethrow;
     }
   }
+
+  Future<void> deleteEmployee(String id) async {
+    final url = Uri.https('employee-data-fe35b-default-rtdb.firebaseio.com',
+        '/Employee/$id.json');
+    final existingEmployeeIndex = _emps.indexWhere((prod) => prod.id == id);
+    var existingEmployee = _emps[existingEmployeeIndex];
+    _emps.removeAt(existingEmployeeIndex);
+    notifyListeners();
+    final response = await http.delete(url);
+    if (response.statusCode >= 400) {
+      _emps.insert(existingEmployeeIndex, existingEmployee);
+      notifyListeners();
+    }
+  }
 }

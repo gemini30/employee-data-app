@@ -9,6 +9,8 @@ class EmployeeDetailsScreen extends StatelessWidget {
   // final String name;
   // const EmployeeDetailsScreen(this.name);
   static const routeName = '/employee-detail';
+
+  get scaffold => null;
   Widget buildSectionTitle(String text, BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 12),
@@ -88,6 +90,38 @@ class EmployeeDetailsScreen extends StatelessWidget {
                 ),
               ),
             ),
+            SizedBox(
+              width: 375,
+              height: 50,
+              child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                      primary: Theme.of(context).colorScheme.secondary),
+                  onPressed: () async {
+                    try {
+                      await Provider.of<Employees>(context, listen: false)
+                          .deleteEmployee(empId);
+                      Navigator.pop(context);
+                    } catch (error) {
+                      scaffold.showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                            'Deleting failed!',
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        color: Theme.of(context).errorColor,
+                      );
+                    }
+                  },
+                  icon: const Icon(
+                    Icons.delete,
+                    color: Colors.black,
+                  ),
+                  label: const Text(
+                    'Delete Employee',
+                    style: TextStyle(color: Colors.black),
+                  )),
+            )
           ],
         ),
       ),
